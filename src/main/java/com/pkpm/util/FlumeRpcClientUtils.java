@@ -40,6 +40,9 @@ public class FlumeRpcClientUtils {
 
     private static RpcClient client;
 
+    static {
+        init();
+    }
     /**
      * 初始化客户端配置 客户端配置必须放在classpath根目录下的flume-client.properties文件中
      */

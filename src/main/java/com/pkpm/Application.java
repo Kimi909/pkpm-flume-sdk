@@ -2,6 +2,7 @@ package com.pkpm;
 
 import com.google.common.collect.Lists;
 import com.google.common.eventbus.EventBus;
+import com.pkpm.annotation.RequestJsonHandlerMethodArgumentResolver;
 import org.apache.commons.cli.*;
 import org.apache.flume.*;
 import org.apache.flume.lifecycle.LifecycleAware;
@@ -15,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,6 +35,12 @@ public class Application {
 		SpringApplication.run(Application.class, args);
 
 	}
+
+	/*@Override
+	public  void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers){
+		argumentResolvers.add(new RequestJsonHandlerMethodArgumentResolver());
+		super.
+	}*/
 
 	private static void startFlume(String[] args) {
 		try {

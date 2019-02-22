@@ -62,7 +62,7 @@ public class WinFileUtil {
 
     public static void main(String[] args) throws Exception {
       //  File f=new File("/Users/yangyibo/Idea/fileInfoTest/target/logs/fileInfo.log");
-        File f=new File("F:\\data\\logdfs/fileInfo.log");
+        File f=new File("F:\\data\\logdfs11\\f21.log");
         System.out.println(f.toPath());
         System.out.println(Long.valueOf("1232188718728378"));
 //        System.out.println("file ino: "+Files.getAttribute(f.toPath(), "unix:ino"));
