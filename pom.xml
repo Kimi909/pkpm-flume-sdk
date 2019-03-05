@@ -161,6 +161,93 @@
 				</configuration>
 
 			</plugin>
+			<!-- 用于生成jar包的plugin -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.6</version>
+				<configuration>
+					<!-- 把生成的jar包放在lib目录下（和其他所有jar包一起） -->
+					<outputDirectory>${project.build.directory}/lib</outputDirectory>
+					<archive>
+						<manifest>
+							<addClasspath>true</addClasspath>
+							<classpathPrefix>lib/</classpathPrefix>
+						</manifest>
+					</archive>
+					<excludes>
+						<!-- 排除掉一些文件,不要放到jar包中，
+                        这里是为了排除掉src/main/resources中的文件（它们应该放到conf目录）
+                        这里只能指定要排除的目标文件，而不能指定源文件，虽然不够完美，但是基本能达到目的。 -->
+						<exclude>*.xml</exclude>
+						<exclude>*.properties</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+
+			<!-- 用于拷贝maven依赖的plugin -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.10</version>
+				<executions>
+					<execution>
+						<id>copy-dependencies</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<!-- 把依赖的所有maven jar包拷贝到lib目录中（这样所有的jar包都在lib目录中） -->
+							<outputDirectory>${project.build.directory}/lib</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- 用于拷贝resource的plugin -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.7</version>
+				<configuration>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+
+			<!-- 配置生成源代码jar的plugin -->
+			<plugin>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>2.4</version>
+				<configuration>
+					<attach>true</attach>
+					<!-- 配置源代码jar文件的存放路径，和其他jar文件一起放在lib目录 -->
+					<outputDirectory>${project.build.directory}/lib</outputDirectory>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>compile</phase>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.5.5</version>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>com.pkpm.Application</mainClass>
+						</manifest>
+					</archive>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 
