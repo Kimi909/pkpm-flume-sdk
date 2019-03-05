@@ -44,6 +44,7 @@ public class Application {
 
 	private static void startFlume(String[] args) {
 		try {
+
 			SSLUtil.initGlobalSSLParameters();
 
 			Options options = new Options();

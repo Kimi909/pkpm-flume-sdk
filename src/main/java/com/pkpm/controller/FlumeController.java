@@ -7,13 +7,12 @@ import com.pkpm.util.ResultObject;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.flume.Event;
+import org.apache.flume.event.EventBuilder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,7 +54,7 @@ public class FlumeController {
         return ResultObject.success(flag);
     }
 
-    @ApiOperation(value = "接收文件流")
+    @ApiOperation(value = "文件流转换成字符串")
     @PostMapping("/upload")
     public ResultObject upload(@RequestParam("file")  @ApiParam(value = "文件流") MultipartFile multipartFile ) throws IOException {
 
@@ -74,6 +73,36 @@ public class FlumeController {
 
 
         return ResultObject.success(flag);
+    }
+
+
+    @ApiOperation(value = "文件流转换成字节流传输")
+    @PostMapping("/byte")
+    public ResultObject uploadByte(@RequestParam("file")  @ApiParam(value = "文件流") MultipartFile multipartFile ) throws IOException {
+
+        Preconditions.checkArgument(!multipartFile.isEmpty(), "请上传文件!");
+        boolean flag = false;
+
+        if(!multipartFile.isEmpty()){
+            InputStream inputStream = multipartFile.getInputStream();
+            //把流文件解析成字节数组
+            byte[] bytes = toByteArray(inputStream);
+            Event event =EventBuilder.withBody(bytes);
+            flag = FlumeRpcClientUtils.append(event);
+            return ResultObject.success(flag);
+        }
+        return ResultObject.success(flag);
+    }
+
+
+    public static byte[] toByteArray(InputStream in) throws IOException {
+        ByteArrayOutputStream out=new ByteArrayOutputStream();
+        byte[] buffer=new byte[1024*4];
+        int n=0;
+        while ( (n=in.read(buffer)) !=-1) {
+            out.write(buffer,0,n);
+        }
+        return out.toByteArray();
     }
 
 }
