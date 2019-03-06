@@ -3,6 +3,7 @@ package com.pkpm.controller;
 import com.google.common.base.Preconditions;
 import com.pkpm.annotation.RequestJson;
 import com.pkpm.util.FlumeRpcClientUtils;
+import com.pkpm.util.FlumeUtil;
 import com.pkpm.util.ResultObject;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -76,6 +77,7 @@ public class FlumeController {
     }
 
 
+
     @ApiOperation(value = "文件流转换成字节流传输")
     @PostMapping("/byte")
     public ResultObject uploadByte(@RequestParam("file")  @ApiParam(value = "文件流") MultipartFile multipartFile ) throws IOException {
@@ -86,7 +88,7 @@ public class FlumeController {
         if(!multipartFile.isEmpty()){
             InputStream inputStream = multipartFile.getInputStream();
             //把流文件解析成字节数组
-            byte[] bytes = toByteArray(inputStream);
+            byte[] bytes = FlumeUtil.toByteArray(inputStream);
             Event event =EventBuilder.withBody(bytes);
             flag = FlumeRpcClientUtils.append(event);
             return ResultObject.success(flag);
@@ -95,14 +97,6 @@ public class FlumeController {
     }
 
 
-    public static byte[] toByteArray(InputStream in) throws IOException {
-        ByteArrayOutputStream out=new ByteArrayOutputStream();
-        byte[] buffer=new byte[1024*4];
-        int n=0;
-        while ( (n=in.read(buffer)) !=-1) {
-            out.write(buffer,0,n);
-        }
-        return out.toByteArray();
-    }
+
 
 }

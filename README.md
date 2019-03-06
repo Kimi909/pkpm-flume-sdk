@@ -32,6 +32,10 @@ apache-flume-1.8.0-bin也可以在windows环境下,通过cmd命令收集指定�
 - 2、有问题联系kbping@qq.com
 
 ### 注意：
--f src\main\resources\flume-client.properties -n agent1
-
 因windows系统不支持tail -f xx.log命令，需要下载tail.exe,安装在C:\Windows\System32目录下。
+
+### windows打包成jar包启动
+nohup java -jar -Dserver.port=9999 pkpm-flume-sdk-0.0.1-SNAPSHOT.jar   -f F:\e-develop\2019-code\flume-client.properties -n agent1 >pkpm-flume-sdk.log 2>&1 &
+### linux下jar包启动
+nohup java -jar -Dserver.port=9999 pkpm-flume-sdk-0.0.1-SNAPSHOT.jar   -f  flume-client.properties -n agent1 >pkpm-flume-sdk.log 2>&1 &
+
